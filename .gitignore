@@ -1,0 +1,11 @@
+# Maven build directory
+target/
+
+# VSCode
+.vscode/
+
+# MacOS
+.DS_Store
+
+# Environment variables
+.env
