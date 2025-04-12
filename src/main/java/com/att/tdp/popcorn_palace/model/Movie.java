@@ -1,10 +1,6 @@
 package com.att.tdp.popcorn_palace.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,9 +15,18 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String title;
+
+    @Column(nullable = false)
     private String genre;
+
+    @Column(nullable = false)
     private int duration;
+
+    @Column(nullable = false)
     private double rating;
+
+    @Column(nullable = false)
     private int releaseYear;
-} 
+}
