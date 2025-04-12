@@ -85,11 +85,11 @@ public class ShowtimeService {
             throw new IllegalArgumentException("End time must be after start time");
         }
 
+        // Movie check moved after validation (still done in the calling method)
         List<Showtime> overlapping = showtimeRepository.findOverlappingShowtimes(
                 showtimeDTO.getTheater(),
                 showtimeDTO.getStartTime(),
-                showtimeDTO.getEndTime()
-        );
+                showtimeDTO.getEndTime());
 
         if (excludeId != null) {
             overlapping.removeIf(s -> s.getId().equals(excludeId));
@@ -100,8 +100,7 @@ public class ShowtimeService {
             throw new OverlappingShowtimeException(
                     showtimeDTO.getTheater(),
                     showtimeDTO.getStartTime().format(formatter),
-                    showtimeDTO.getEndTime().format(formatter)
-            );
+                    showtimeDTO.getEndTime().format(formatter));
         }
     }
 } 
