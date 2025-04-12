@@ -4,6 +4,7 @@ import com.att.tdp.popcorn_palace.exception.booking.SeatAlreadyBookedException;
 import com.att.tdp.popcorn_palace.exception.movie.MovieAlreadyExistsException;
 import com.att.tdp.popcorn_palace.exception.movie.MovieNotFoundException;
 import com.att.tdp.popcorn_palace.exception.showtime.OverlappingShowtimeException;
+import com.att.tdp.popcorn_palace.exception.showtime.ShowtimeNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -36,6 +37,13 @@ public class GlobalExceptionHandler {
         Map<String, String> error = new HashMap<>();
         error.put("error", ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(ShowtimeNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleShowtimeNotFoundException(ShowtimeNotFoundException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
     @ExceptionHandler(OverlappingShowtimeException.class)
