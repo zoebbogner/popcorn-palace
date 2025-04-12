@@ -2,6 +2,8 @@ package com.att.tdp.popcorn_palace.exception;
 
 import com.att.tdp.popcorn_palace.exception.movie.MovieAlreadyExistsException;
 import com.att.tdp.popcorn_palace.exception.movie.MovieNotFoundException;
+import com.att.tdp.popcorn_palace.exception.showtime.OverlappingShowtimeException;
+import com.att.tdp.popcorn_palace.exception.showtime.ShowtimeNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -63,5 +65,28 @@ class GlobalExceptionHandlerTest {
         assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals("Movie with title 'Inception' already exists", response.getBody().get("error"));
+    }
+
+    @Test
+    void shouldHandleShowtimeNotFoundException() {
+        ShowtimeNotFoundException ex = new ShowtimeNotFoundException(1L);
+
+        ResponseEntity<Map<String, String>> response = handler.handleShowtimeNotFoundException(ex);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals("Showtime with ID 1 not found", response.getBody().get("error"));
+    }
+
+    @Test
+    void shouldHandleOverlappingShowtimeException() {
+        OverlappingShowtimeException ex = new OverlappingShowtimeException("Theater 1", "10:00", "12:00");
+
+        ResponseEntity<Map<String, String>> response = handler.handleOverlappingShowtimeException(ex);
+
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals("There is already a showtime in theater 'Theater 1' between 10:00 and 12:00", 
+                     response.getBody().get("error"));
     }
 }
