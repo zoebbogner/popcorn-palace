@@ -26,52 +26,42 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MovieNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleMovieNotFoundException(MovieNotFoundException ex) {
-        Map<String, String> error = new HashMap<>();
-        error.put("error", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    public ResponseEntity<ErrorResponse> handleMovieNotFoundException(MovieNotFoundException ex) {
+        return buildError(HttpStatus.NOT_FOUND, "Movie Not Found", ex.getMessage());
     }
 
     @ExceptionHandler(MovieAlreadyExistsException.class)
-    public ResponseEntity<Map<String, String>> handleMovieAlreadyExistsException(MovieAlreadyExistsException ex) {
-        Map<String, String> error = new HashMap<>();
-        error.put("error", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    public ResponseEntity<ErrorResponse> handleMovieAlreadyExistsException(MovieAlreadyExistsException ex) {
+        return buildError(HttpStatus.CONFLICT, "Movie Already Exists", ex.getMessage());
     }
 
     @ExceptionHandler(ShowtimeNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleShowtimeNotFoundException(ShowtimeNotFoundException ex) {
-        Map<String, String> error = new HashMap<>();
-        error.put("error", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    public ResponseEntity<ErrorResponse> handleShowtimeNotFoundException(ShowtimeNotFoundException ex) {
+        return buildError(HttpStatus.NOT_FOUND, "Showtime Not Found", ex.getMessage());
     }
 
     @ExceptionHandler(OverlappingShowtimeException.class)
-    public ResponseEntity<Map<String, String>> handleOverlappingShowtimeException(OverlappingShowtimeException ex) {
-        Map<String, String> error = new HashMap<>();
-        error.put("error", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    public ResponseEntity<ErrorResponse> handleOverlappingShowtimeException(OverlappingShowtimeException ex) {
+        return buildError(HttpStatus.CONFLICT, "Overlapping Showtime", ex.getMessage());
     }
 
     @ExceptionHandler(SeatAlreadyBookedException.class)
-    public ResponseEntity<Map<String, String>> handleSeatAlreadyBookedException(SeatAlreadyBookedException ex) {
-        Map<String, String> error = new HashMap<>();
-        error.put("error", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
-    }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, String>> handleGenericException(Exception ex) {
-        Map<String, String> error = new HashMap<>();
-        error.put("error", "Internal server error: " + ex.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    public ResponseEntity<ErrorResponse> handleSeatAlreadyBookedException(SeatAlreadyBookedException ex) {
+        return buildError(HttpStatus.CONFLICT, "Seat Already Booked", ex.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Map<String, String>> handleIllegalArgumentException(IllegalArgumentException ex) {
-        Map<String, String> error = new HashMap<>();
-        error.put("error", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
+        return buildError(HttpStatus.BAD_REQUEST, "Invalid Argument", ex.getMessage());
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
+        return buildError(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", ex.getMessage());
+    }
+
+    private ResponseEntity<ErrorResponse> buildError(HttpStatus status, String error, String message) {
+        ErrorResponse errorResponse = new ErrorResponse(status.value(), error, message);
+        return ResponseEntity.status(status).body(errorResponse);
+    }
 } 
