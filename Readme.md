@@ -75,7 +75,7 @@ The booking system is designed to handle concurrent booking requests safely:
 For your convenience, compose.yml includes Postgresql DB, the app is already pointing to this connection. In addition, you have the schema and data SQL files that can setup your DB schema and init data.
 
 ## Prerequisite
-1. Java SDK - https://www.oracle.com/java/technologies/downloads/#java21
+1. Java SDK - https://www.oracle.com/java/technologies/downloads/#java17
 2. Java IDE - https://www.jetbrains.com/idea/download or any other IDE
 3. Docker - https://www.docker.com/products/docker-desktop/
 
