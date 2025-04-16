@@ -5,6 +5,8 @@ import com.att.tdp.popcorn_palace.exception.movie.MovieAlreadyExistsException;
 import com.att.tdp.popcorn_palace.exception.movie.MovieNotFoundException;
 import com.att.tdp.popcorn_palace.exception.showtime.OverlappingShowtimeException;
 import com.att.tdp.popcorn_palace.exception.showtime.ShowtimeNotFoundException;
+import jakarta.persistence.OptimisticLockException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -50,6 +52,19 @@ public class GlobalExceptionHandler {
         return buildError(HttpStatus.CONFLICT, "Seat Already Booked", ex.getMessage());
     }
 
+    @ExceptionHandler(OptimisticLockException.class)
+    public ResponseEntity<ErrorResponse> handleOptimisticLockException(OptimisticLockException ex) {
+        return buildError(HttpStatus.CONFLICT, "Concurrent Modification", "The resource was modified by another user. Please try again.");
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        if (ex.getMessage() != null && ex.getMessage().contains("unique constraint")) {
+            return buildError(HttpStatus.CONFLICT, "Resource Conflict", "The resource already exists or has been modified by another user.");
+        }
+        return buildError(HttpStatus.INTERNAL_SERVER_ERROR, "Data Integrity Violation", ex.getMessage());
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
         return buildError(HttpStatus.BAD_REQUEST, "Invalid Argument", ex.getMessage());
@@ -61,7 +76,7 @@ public class GlobalExceptionHandler {
     }
 
     private ResponseEntity<ErrorResponse> buildError(HttpStatus status, String error, String message) {
-        ErrorResponse errorResponse = new ErrorResponse(status.value(), error, message);
-        return ResponseEntity.status(status).body(errorResponse);
+        ErrorResponse response = new ErrorResponse(status.value(), error, message);
+        return ResponseEntity.status(status).body(response);
     }
 } 
