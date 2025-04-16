@@ -93,14 +93,13 @@ class MovieApiIntegrationTest {
     @Test
     void shouldReturnConflictWhenAddingDuplicateMovie() throws Exception {
         // Given
-        movieRepository.save(new Movie(
-                null,
-                "Inception",
-                "Sci-Fi",
-                148,
-                8.8,
-                2010
-        ));
+        Movie movie = new Movie();
+        movie.setTitle("Inception");
+        movie.setGenre("Sci-Fi");
+        movie.setDuration(148);
+        movie.setRating(8.8);
+        movie.setReleaseYear(2010);
+        movieRepository.save(movie);
 
         // When & Then
         mockMvc.perform(post("/movies")
@@ -127,14 +126,12 @@ class MovieApiIntegrationTest {
     @Test
     void shouldUpdateExistingMovie() throws Exception {
         // Given
-        Movie existingMovie = new Movie(
-                null,
-                "Inception",
-                "Sci-Fi",
-                148,
-                8.8,
-                2010
-        );
+        Movie existingMovie = new Movie();
+        existingMovie.setTitle("Inception");
+        existingMovie.setGenre("Sci-Fi");
+        existingMovie.setDuration(148);
+        existingMovie.setRating(8.8);
+        existingMovie.setReleaseYear(2010);
         movieRepository.save(existingMovie);
 
         MovieDTO updateDTO = new MovieDTO();
@@ -167,14 +164,12 @@ class MovieApiIntegrationTest {
     @Test
     void shouldDeleteExistingMovie() throws Exception {
         // Given
-        Movie movie = new Movie(
-                null,
-                "Inception",
-                "Sci-Fi",
-                148,
-                8.8,
-                2010
-        );
+        Movie movie = new Movie();
+        movie.setTitle("Inception");
+        movie.setGenre("Sci-Fi");
+        movie.setDuration(148);
+        movie.setRating(8.8);
+        movie.setReleaseYear(2010);
         movieRepository.save(movie);
 
         // When & Then
