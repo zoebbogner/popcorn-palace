@@ -32,4 +32,7 @@ public class Showtime {
 
     @Column(nullable = false)
     private double price;
+
+    @Version
+    private Long version;
 } 

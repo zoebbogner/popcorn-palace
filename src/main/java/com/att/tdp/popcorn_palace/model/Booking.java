@@ -26,4 +26,7 @@ public class Booking {
 
     @Column(name = "user_id", nullable = false)
     private String userId;
+
+    @Version
+    private Long version;
 } 
