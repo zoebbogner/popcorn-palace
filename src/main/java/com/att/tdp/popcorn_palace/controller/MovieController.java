@@ -3,6 +3,8 @@ package com.att.tdp.popcorn_palace.controller;
 import com.att.tdp.popcorn_palace.dto.MovieDTO;
 import com.att.tdp.popcorn_palace.model.Movie;
 import com.att.tdp.popcorn_palace.service.MovieService;
+
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +38,7 @@ public class MovieController {
         return ResponseEntity.ok(movieService.updateMovie(title, movieDTO));
     }
 
+    @Transactional
     @DeleteMapping("/{title}")
     public ResponseEntity<Void> deleteMovie(@PathVariable String title) {
         movieService.deleteMovie(title);
